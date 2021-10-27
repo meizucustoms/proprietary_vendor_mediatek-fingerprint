@@ -51,8 +51,11 @@ void GoodixFingerprintDaemonProxy::hal_notify_callback(const gf_fingerprint_msg_
             callback->onError(device, msg->data.error);
             break;
         case GF_FINGERPRINT_ACQUIRED:
-            ALOGD("onAcquired(%d)", msg->data.acquired.acquired_info);
-            callback->onAcquired(device, msg->data.acquired.acquired_info);
+            ALOGD("onAcquired(%d), duplicate_finger_id(%d)", 
+                  msg->data.acquired.acquired_info,
+                  msg->data.authenticated.finger.fid);
+            callback->onAcquired(device, msg->data.acquired.acquired_info,
+                                         msg->data.authenticated.finger.fid);
             break;
         case GF_FINGERPRINT_AUTHENTICATED:
             ALOGD("onAuthenticated(fid=%u, gid=%u)",

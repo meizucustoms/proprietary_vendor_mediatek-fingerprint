@@ -42,7 +42,7 @@ class IGoodixFingerprintDaemonCallback : public IInterface {
         };
 
         virtual status_t onEnrollResult(int64_t devId, int32_t fpId, int32_t gpId, int32_t rem) = 0;
-        virtual status_t onAcquired(int64_t devId, int32_t acquiredInfo) = 0;
+        virtual status_t onAcquired(int64_t devId, int32_t acquiredInfo, int32_t duplicate_finger_id) = 0;
         virtual status_t onAuthenticated(int64_t devId, int32_t fingerId, int32_t groupId,
                 const uint8_t* hat, int32_t hatSize) = 0;
         virtual status_t onError(int64_t devId, int32_t error) = 0;

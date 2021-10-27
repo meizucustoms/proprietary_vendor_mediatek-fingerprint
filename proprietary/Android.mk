@@ -24,7 +24,11 @@ LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/goodix/gf_hal/public \
     $(LOCAL_PATH)/goodix/goodixfingerprintd
 
-LOCAL_SRC_FILES := goodix/fingerprint.cpp
+LOCAL_SRC_FILES := \
+    goodix/fingerprint.cpp \
+    goodix/goodixfingerprintd/IGoodixFingerprintDaemon.cpp \
+    goodix/goodixfingerprintd/IGoodixFingerprintDaemonCallback.cpp \
+    goodix/goodixfingerprintd/GoodixFingerprintDaemonCallbackProxy.cpp
 
 LOCAL_SHARED_LIBRARIES := \
     libgf_hal \

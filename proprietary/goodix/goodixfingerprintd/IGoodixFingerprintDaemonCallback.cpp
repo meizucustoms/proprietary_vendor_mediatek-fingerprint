@@ -40,7 +40,8 @@ status_t BnGoodixFingerprintDaemonCallback::onTransact(uint32_t code, const Parc
         CHECK_INTERFACE(IGoodixFingerprintDaemonCallback, data, reply);
         int64_t devId = data.readInt64();
         int32_t acquiredInfo = data.readInt32();
-        onAcquired(devId, acquiredInfo);
+        int32_t duplicate_finger_id = data.readInt32();
+        onAcquired(devId, acquiredInfo, duplicate_finger_id);
         return NO_ERROR;
     }
     case ON_AUTHENTICATED: {
@@ -122,11 +123,12 @@ public:
         return remote()->transact(ON_ENROLL_RESULT, data, &reply, IBinder::FLAG_ONEWAY);
     }
 
-    virtual status_t onAcquired(int64_t devId, int32_t acquiredInfo) {
+    virtual status_t onAcquired(int64_t devId, int32_t acquiredInfo, int32_t duplicate_finger_id) {
         Parcel data, reply;
         data.writeInterfaceToken(IGoodixFingerprintDaemonCallback::getInterfaceDescriptor());
         data.writeInt64(devId);
         data.writeInt32(acquiredInfo);
+        data.writeInt32(duplicate_finger_id);
         return remote()->transact(ON_ACQUIRED, data, &reply, IBinder::FLAG_ONEWAY);
     }
 

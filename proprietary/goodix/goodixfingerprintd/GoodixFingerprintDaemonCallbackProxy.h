@@ -13,7 +13,7 @@ public:
     }
 
     virtual status_t onEnrollResult(int64_t devId, int32_t fpId, int32_t gpId, int32_t rem);
-    virtual status_t onAcquired(int64_t devId, int32_t acquiredInfo);
+    virtual status_t onAcquired(int64_t devId, int32_t acquiredInfo, int32_t duplicate_finger_id);
     virtual status_t onAuthenticated(int64_t devId, int32_t fingerId, int32_t groupId, const uint8_t* hat, int32_t hatSize);
     virtual status_t onError(int64_t devId, int32_t error);
     virtual status_t onRemoved(int64_t devId, int32_t fingerId, int32_t groupId);

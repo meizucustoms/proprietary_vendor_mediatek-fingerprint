@@ -28,7 +28,7 @@ status_t GoodixFingerprintDaemonCallbackProxy::onEnrollResult(int64_t devId, int
     message.data.enroll.finger.gid = gpId;
     message.data.enroll.samples_remaining = rem;
 
-    if(mDevice != NULL) {
+    if (mDevice != NULL) {
         mDevice->notify(&message);
     } else {
         ALOGD("onEnrollResult mDevice is NULL");
@@ -37,13 +37,15 @@ status_t GoodixFingerprintDaemonCallbackProxy::onEnrollResult(int64_t devId, int
     return 0;
 }
 
-status_t GoodixFingerprintDaemonCallbackProxy::onAcquired(int64_t  devId, int32_t  acquiredInfo) {
-    ALOGD("onAcquired devId = %ld, acquiredInfo = %u", devId, acquiredInfo);
+status_t GoodixFingerprintDaemonCallbackProxy::onAcquired(int64_t devId, int32_t acquiredInfo, int32_t duplicate_finger_id) {
+    ALOGD("onAcquired devId = %ld, acquiredInfo = %u, duplicate_finger_id = %u", 
+            devId, acquiredInfo, duplicate_finger_id);
     fingerprint_msg_t message;
     message.type = FINGERPRINT_ACQUIRED;
     message.data.acquired.acquired_info = (fingerprint_acquired_info_t)acquiredInfo;
+    message.data.authenticated.finger.fid = duplicate_finger_id;
 
-    if(mDevice != NULL) {
+    if (mDevice != NULL) {
         mDevice->notify(&message);
     } else {
         ALOGD("onAcquired mDevice is NULL");
@@ -61,7 +63,7 @@ status_t GoodixFingerprintDaemonCallbackProxy::onAuthenticated(int64_t  devId, i
     message.data.authenticated.finger.gid = groupId;
     memcpy(&(message.data.authenticated.hat), hat, hatSize);
 
-    if(mDevice != NULL) {
+    if (mDevice != NULL) {
         mDevice->notify(&message);
     } else {
         ALOGD("onAuthenticated mDevice is NULL");
@@ -76,7 +78,7 @@ status_t GoodixFingerprintDaemonCallbackProxy::onError(int64_t  devId, int32_t  
     message.type = FINGERPRINT_ERROR;
     message.data.error = (fingerprint_error_t)error;
 
-    if(mDevice != NULL) {
+    if (mDevice != NULL) {
         mDevice->notify(&message);
     } else {
         ALOGD("onError mDevice is NULL");
@@ -93,7 +95,7 @@ status_t GoodixFingerprintDaemonCallbackProxy::onRemoved(int64_t  devId,
     message.data.removed.finger.fid = fingerId;
     message.data.removed.finger.gid = groupId;
 
-    if(mDevice != NULL) {
+    if (mDevice != NULL) {
         mDevice->notify(&message);
     } else {
         ALOGD("onRemoved mDevice is NULL");
