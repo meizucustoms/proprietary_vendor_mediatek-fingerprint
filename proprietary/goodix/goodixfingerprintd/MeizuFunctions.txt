@@ -1,0 +1,29 @@
+- New functions (UNUSED)
+  BpGoodixFingerprintDaemon:
+    invoke_fido_command(this, void *, uint32_t, void *, uint32_t *) (UNUSED)
+    stopAuthenticateFido(this) (UNUSED)
+    authenticateFido(this, int32_t, void *, uint32_t, void *, uint32_t) (UNUSED)
+
+  BpGoodixFingerprintDaemonCallback:
+    onAuthenticatedFido(this, int64_t, int32_t, const void *, int32_t) (UNUSED)
+
+  GoodixFingerprintDaemonCallbackProxy:
+    onAuthenticatedFido(this, int64_t, int32_t, const void *, uint32_t) (UNUSED)
+
+- Edited functions
+  BnGoodixFingerprintDaemon:
+    onTransact() - new switch-case values
+
+  BnGoodixFingerprintDaemonCallback:
+    onTransact() - new switch-case values
+
+  BpGoodixFingerprintDaemonCallback:
+    onAcquired() - duplicate_finger_id (DONE)
+
+  GoodixFingerprintDaemonCallbackProxy:
+    onAcquired() - duplicate_finger_id (DONE)
+
+- Edited structures/enums
+  gf_fingerprint_msg_t
+  gf_fingerprint_msg_type
+

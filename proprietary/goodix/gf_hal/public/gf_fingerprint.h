@@ -9,8 +9,10 @@ typedef enum gf_fingerprint_msg_type {
     GF_FINGERPRINT_TEMPLATE_ENROLLING = 3,
     GF_FINGERPRINT_TEMPLATE_REMOVED = 4,
     GF_FINGERPRINT_AUTHENTICATED = 5,
-    GF_FINGERPRINT_TEST_CMD = 6,
-    GF_FINGERPRINT_HBD = 7
+    GF_FINGERPRINT_ENUMERATE = 6,
+    GF_FINGERPRINT_TEST_CMD = 7,
+    GF_FINGERPRINT_HBD = 8,
+    GF_FINGERPRINT_AUTHENTICATED_FIDO = 9,
 } gf_fingerprint_msg_type_t;
 
 typedef enum gf_fingerprint_error {
@@ -51,18 +53,30 @@ typedef struct gf_fingerprint_enroll {
     uint64_t msg;
 } gf_fingerprint_enroll_t;
 
+typedef struct gf_fingerprint_enumerate {
+    gf_fingerprint_finger_id_t finger;
+    uint32_t samples_remaining;
+} gf_fingerprint_enumerate_t;
+
 typedef struct gf_fingerprint_removed {
     gf_fingerprint_finger_id_t finger;
 } gf_fingerprint_removed_t;
 
 typedef struct gf_fingerprint_acquired {
     gf_fingerprint_acquired_info_t acquired_info;
+    uint32_t fid;
 } gf_fingerprint_acquired_t;
 
 typedef struct gf_fingerprint_authenticated {
     gf_fingerprint_finger_id_t finger;
     hw_auth_token_t hat;
 } gf_fingerprint_authenticated_t;
+
+typedef struct gf_fingerprint_authenticated_fido {
+    int32_t finger_id;
+    void *data;
+    uint32_t uvt_data_len;
+} gf_fingerprint_authenticated_fido_t;
 
 typedef struct gf_fingerprint_test_cmd {
     int32_t cmd_id;
@@ -82,13 +96,15 @@ typedef struct gf_fingerprint_msg {
     union {
         gf_fingerprint_error_t error;
         gf_fingerprint_enroll_t enroll;
+        gf_fingerprint_enumerate_t enumerate;
         gf_fingerprint_removed_t removed;
         gf_fingerprint_acquired_t acquired;
         gf_fingerprint_authenticated_t authenticated;
+        gf_fingerprint_authenticated_fido_t authenticated_fido;
         gf_fingerprint_test_cmd_t test;
         gf_fingerprint_hbd_t hbd;
     } data;
-} gf_fingerprint_msg_t;
+} gf_fingerprint_msg_t; // mzsize: 528 B
 
 typedef struct gf_fingerprint_device {
 

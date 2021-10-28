@@ -35,6 +35,8 @@ static const String16 DUMP_PERMISSION("android.permission.DUMP");
 
 status_t BnGoodixFingerprintDaemon::onTransact(uint32_t code, const Parcel& data, Parcel* reply,
         uint32_t flags) {
+            ALOGE("onTransact(%d) daemon", code);
+
     switch(code) {
         case AUTHENTICATE: {
             CHECK_INTERFACE(IGoodixFingerprintDaemon, data, reply);

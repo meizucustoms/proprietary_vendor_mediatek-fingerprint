@@ -45,6 +45,9 @@ void GoodixFingerprintDaemonProxy::hal_notify_callback(const gf_fingerprint_msg_
         return;
     }
     const int64_t device = (int64_t) instance->mDevice;
+
+    ALOGE("hal_notify_callback(%d) proxy", (int32_t) msg->type);
+
     switch (msg->type) {
         case GF_FINGERPRINT_ERROR:
             ALOGD("onError(%d)", msg->data.error);
@@ -53,19 +56,9 @@ void GoodixFingerprintDaemonProxy::hal_notify_callback(const gf_fingerprint_msg_
         case GF_FINGERPRINT_ACQUIRED:
             ALOGD("onAcquired(%d), duplicate_finger_id(%d)", 
                   msg->data.acquired.acquired_info,
-                  msg->data.authenticated.finger.fid);
+                  msg->data.acquired.fid);
             callback->onAcquired(device, msg->data.acquired.acquired_info,
-                                         msg->data.authenticated.finger.fid);
-            break;
-        case GF_FINGERPRINT_AUTHENTICATED:
-            ALOGD("onAuthenticated(fid=%u, gid=%u)",
-                    msg->data.authenticated.finger.fid,
-                    msg->data.authenticated.finger.gid);
-            callback->onAuthenticated(device,
-                    msg->data.authenticated.finger.fid,
-                    msg->data.authenticated.finger.gid,
-                    reinterpret_cast<const uint8_t *>(&msg->data.authenticated.hat),
-                    sizeof(hw_auth_token_t));
+                                         msg->data.acquired.fid);
             break;
         case GF_FINGERPRINT_TEMPLATE_ENROLLING:
             ALOGD("onEnrollResult(fid=%u, gid=%u, rem=%u)",
@@ -84,6 +77,16 @@ void GoodixFingerprintDaemonProxy::hal_notify_callback(const gf_fingerprint_msg_
             callback->onRemoved(device,
                     msg->data.removed.finger.fid,
                     msg->data.removed.finger.gid);
+            break;
+        case GF_FINGERPRINT_AUTHENTICATED:
+            ALOGD("onAuthenticated(fid=%u, gid=%u)",
+                    msg->data.authenticated.finger.fid,
+                    msg->data.authenticated.finger.gid);
+            callback->onAuthenticated(device,
+                    msg->data.authenticated.finger.fid,
+                    msg->data.authenticated.finger.gid,
+                    reinterpret_cast<const uint8_t *>(&msg->data.authenticated.hat),
+                    sizeof(hw_auth_token_t));
             break;
         case GF_FINGERPRINT_TEST_CMD:
             ALOGD("onTestCmd(cmd_id = %u, result = %s, result_len = %u)",

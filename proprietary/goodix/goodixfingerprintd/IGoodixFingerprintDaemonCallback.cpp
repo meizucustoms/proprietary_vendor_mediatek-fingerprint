@@ -26,6 +26,9 @@ namespace android {
 
 status_t BnGoodixFingerprintDaemonCallback::onTransact(uint32_t code, const Parcel& data, Parcel* reply,
         uint32_t flags) {
+             ALOGE("onTransact(%d) callback", code);
+
+
     switch (code) {
     case ON_ENROLL_RESULT: {
         CHECK_INTERFACE(IGoodixFingerprintDaemonCallback, data, reply);
@@ -114,6 +117,16 @@ public:
             BpInterface<IGoodixFingerprintDaemonCallback>(impl) {
     }
     virtual status_t onEnrollResult(int64_t devId, int32_t fpId, int32_t gpId, int32_t rem) {
+        Parcel data, reply;
+        data.writeInterfaceToken(IGoodixFingerprintDaemonCallback::getInterfaceDescriptor());
+        data.writeInt64(devId);
+        data.writeInt32(fpId);
+        data.writeInt32(gpId);
+        data.writeInt32(rem);
+        return remote()->transact(ON_ENROLL_RESULT, data, &reply, IBinder::FLAG_ONEWAY);
+    }
+
+    virtual status_t onEnumerate(int64_t devId, int32_t fpId, int32_t gpId, int32_t rem) {
         Parcel data, reply;
         data.writeInterfaceToken(IGoodixFingerprintDaemonCallback::getInterfaceDescriptor());
         data.writeInt64(devId);
